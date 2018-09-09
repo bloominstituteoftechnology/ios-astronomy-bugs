@@ -21,6 +21,29 @@ class PhotosCollectionViewController: UIViewController, UICollectionViewDataSour
             
             self.roverInfo = rover
         }
+        
+        configureTitleView()
+        updateViews()
+    }
+    
+    @IBAction func goToPreviousSol(_ sender: Any?) {
+        guard let solDescriptions = roverInfo?.solDescriptions else { return }
+        guard let sol = solDescription?.sol, sol > 0 else {
+            solDescription = solDescriptions.first
+            return
+        }
+        
+        solDescription = solDescriptions[sol-1]
+    }
+    
+    @IBAction func goToNextSol(_ sender: Any?) {
+        guard let solDescriptions = roverInfo?.solDescriptions else { return }
+        guard let sol = solDescription?.sol, sol < solDescriptions.count else {
+            solDescription = solDescriptions.last
+            return
+        }
+        
+        solDescription = solDescriptions[sol+1]
     }
     
     // UICollectionViewDataSource/Delegate
@@ -64,7 +87,46 @@ class PhotosCollectionViewController: UIViewController, UICollectionViewDataSour
         return UIEdgeInsets(top: 0, left: 10.0, bottom: 0, right: 10.0)
     }
     
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ShowDetail" {
+            guard let indexPath = collectionView.indexPathsForSelectedItems?.first else { return }
+            let detailVC = segue.destination as! PhotoDetailViewController
+            detailVC.photo = photoReferences[indexPath.item]
+        }
+    }
+    
     // MARK: - Private
+    
+    private func configureTitleView() {
+        
+        let font = UIFont.systemFont(ofSize: 30)
+        let attrs = [NSAttributedStringKey.font: font]
+        
+        let prevButton = UIButton(type: .system)
+        let prevTitle = NSAttributedString(string: "<", attributes: attrs)
+        prevButton.setAttributedTitle(prevTitle, for: .normal)
+        prevButton.addTarget(self, action: #selector(goToPreviousSol(_:)), for: .touchUpInside)
+        
+        let nextButton = UIButton(type: .system)
+        let nextTitle = NSAttributedString(string: ">", attributes: attrs)
+        nextButton.setAttributedTitle(nextTitle, for: .normal)
+        nextButton.addTarget(self, action: #selector(goToNextSol(_:)), for: .touchUpInside)
+        
+        let stackView = UIStackView(arrangedSubviews: [prevButton, solLabel, nextButton])
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.spacing = UIStackView.spacingUseSystem
+        
+        navigationItem.titleView = stackView
+    }
+    
+    private func updateViews() {
+        guard isViewLoaded else { return }
+        solLabel.text = "Sol \(solDescription?.sol ?? 0)"
+    }
     
     private func loadImage(forCell cell: ImageCollectionViewCell, forItemAt indexPath: IndexPath) {
         let photoReference = photoReferences[indexPath.item]
@@ -123,9 +185,11 @@ class PhotosCollectionViewController: UIViewController, UICollectionViewDataSour
         didSet {
             if let rover = roverInfo,
                 let sol = solDescription?.sol {
+                photoReferences = []
                 client.fetchPhotos(from: rover, onSol: sol) { (photoRefs, error) in
                     if let e = error { NSLog("Error fetching photos for \(rover.name) on sol \(sol): \(e)"); return }
                     self.photoReferences = photoRefs ?? []
+                    DispatchQueue.main.async { self.updateViews() }
                 }
             }
         }
@@ -137,4 +201,5 @@ class PhotosCollectionViewController: UIViewController, UICollectionViewDataSour
     }
     
     @IBOutlet var collectionView: UICollectionView!
+    let solLabel = UILabel()
 }
