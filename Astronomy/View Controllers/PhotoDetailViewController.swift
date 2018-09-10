@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 class PhotoDetailViewController: UIViewController {
     
@@ -16,7 +17,15 @@ class PhotoDetailViewController: UIViewController {
     }
     
     @IBAction func save(_ sender: Any) {
-        
+        guard let image = imageView.image else { return }
+        PHPhotoLibrary.shared().performChanges({
+            PHAssetChangeRequest.creationRequestForAsset(from: image)
+        }, completionHandler: { (success, error) in
+            if let error = error {
+                NSLog("Error saving photo: \(error)")
+                return
+            }
+        })
     }
     
     // MARK: - Private

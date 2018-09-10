@@ -97,17 +97,17 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MarsPlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="33C-GV-pNd">
                                 <rect key="frame" x="0.0" y="64" width="375" height="377"/>
                             </imageView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="MyK-rk-mFe">
-                                <rect key="frame" x="16" y="449" width="343" height="49"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="MyK-rk-mFe">
+                                <rect key="frame" x="16" y="449" width="343" height="87"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Taken by &lt;Rover&gt; on &lt;date&gt; (Sol &lt;sol&gt;)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PDa-7E-DHh">
-                                        <rect key="frame" x="0.0" y="0.0" width="309" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="TOy-rH-ozy">
-                                        <rect key="frame" x="0.0" y="28.5" width="114.5" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="28.5" width="343" height="20.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Camera:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jhh-vC-QKo">
                                                 <rect key="frame" x="0.0" y="0.0" width="64.5" height="20.5"/>
@@ -116,13 +116,20 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9gd-7b-dyz">
-                                                <rect key="frame" x="72.5" y="0.0" width="42" height="20.5"/>
+                                                <rect key="frame" x="72.5" y="0.0" width="270.5" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
                                     </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k8d-jC-3Jh">
+                                        <rect key="frame" x="0.0" y="57" width="343" height="30"/>
+                                        <state key="normal" title="Save to Photo Library"/>
+                                        <connections>
+                                            <action selector="save:" destination="kgd-gk-9pr" eventType="touchUpInside" id="ROY-9I-JfD"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                             </stackView>
                         </subviews>
@@ -138,13 +145,7 @@
                             <constraint firstItem="Ojm-q3-djU" firstAttribute="top" relation="greaterThanOrEqual" secondItem="MyK-rk-mFe" secondAttribute="bottom" constant="10" id="ymg-tv-o1t"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Title" id="4ed-4v-HFq">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="zMV-Ac-NG4">
-                            <connections>
-                                <action selector="save:" destination="kgd-gk-9pr" id="qDw-3k-cTI"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Title" id="4ed-4v-HFq"/>
                     <connections>
                         <outlet property="cameraLabel" destination="9gd-7b-dyz" id="dG4-JQ-QmJ"/>
                         <outlet property="detailLabel" destination="PDa-7E-DHh" id="ge4-Ld-wmV"/>
