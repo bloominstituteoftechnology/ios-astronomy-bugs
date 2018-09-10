@@ -149,8 +149,7 @@ class PhotosCollectionViewController: UIViewController, UICollectionViewDataSour
             defer { self.operations.removeValue(forKey: photoReference.id) }
             
             if let currentIndexPath = self.collectionView?.indexPath(for: cell),
-                currentIndexPath != indexPath {
-                print("Got image for now-reused cell")
+                currentIndexPath == indexPath {
                 return // Cell has been reused
             }
             
