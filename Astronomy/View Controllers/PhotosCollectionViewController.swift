@@ -102,7 +102,7 @@ class PhotosCollectionViewController: UIViewController, UICollectionViewDataSour
     private func configureTitleView() {
         
         let font = UIFont.systemFont(ofSize: 30)
-        let attrs = [NSAttributedStringKey.font: font]
+        let attrs = [NSAttributedString.Key.font: font]
         
         let prevButton = UIButton(type: .system)
         let prevTitle = NSAttributedString(string: "<", attributes: attrs)
