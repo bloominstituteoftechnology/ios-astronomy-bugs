@@ -33,7 +33,7 @@ struct MarsRover: Codable {
         case status
         case maxSol
         case maxDate
-        case numberOfPhotos
+        case numberOfPhotos = "totalPhotos"
         case solDescriptions = "photos"
     }
     
