@@ -20,3 +20,5 @@ class Cache<Key: Hashable, Value> {
     
     private var cache = [Key : Value]()
 }
+
+// edit 
