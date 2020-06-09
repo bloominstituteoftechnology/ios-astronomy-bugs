@@ -18,30 +18,51 @@ class PhotoDetailViewController: UIViewController {
     
     @IBAction func save(_ sender: Any) {
         guard let image = imageView.image else { return }
-        PHPhotoLibrary.shared().performChanges({
+      
+      PHPhotoLibrary.requestAuthorization { (status) in
+        if status == .authorized {
+          PHPhotoLibrary.shared().performChanges({
             PHAssetChangeRequest.creationRequestForAsset(from: image)
-        }, completionHandler: { (success, error) in
+          }, completionHandler: { (success, error) in
             if let error = error {
-                NSLog("Error saving photo: \(error)")
-                return
+              NSLog("Error saving photo: \(error)")
+              return
             }
-        })
+          })
+        } else {
+          DispatchQueue.main.async {
+            let alert = UIAlertController(title: "Saving Image", message: "Can't save the image", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            
+            self.present(alert, animated: true)
+          }
+        }
+      }
+      
+      
+        
     }
     
     // MARK: - Private
     
-    private func updateViews() {
-        guard let photo = photo, isViewLoaded else { return }
-        do {
-            let data = try Data(contentsOf: photo.imageURL)
-            imageView.image = UIImage(data: data)
-            let dateString = dateFormatter.string(from: photo.earthDate)
-            detailLabel.text = "Taken by \(photo.camera.roverId) on \(dateString) (Sol \(photo.sol))"
-            cameraLabel.text = photo.camera.fullName
-        } catch {
-            NSLog("Error setting up views on detail view controller: \(error)")
-        }
+  private func updateViews() {
+    guard let photo = photo, isViewLoaded,
+      let photoUrl = photo.imageURL.usingHTTPS
+      else { return }
+    
+    let dateString = dateFormatter.string(from: photo.earthDate)
+    title = dateString
+    detailLabel.text = "Taken by \(photo.camera.roverId) on \(dateString) (Sol \(photo.sol))"
+    cameraLabel.text = photo.camera.fullName
+    
+    do {
+      let data = try Data(contentsOf: photoUrl)
+      imageView.image = UIImage(data: data)
+      
+    } catch {
+      NSLog("Error setting up views on detail view controller: \(error)")
     }
+  }
     
     // MARK: - Properties
     

@@ -28,22 +28,30 @@ class PhotosCollectionViewController: UIViewController, UICollectionViewDataSour
     
     @IBAction func goToPreviousSol(_ sender: Any?) {
         guard let solDescriptions = roverInfo?.solDescriptions else { return }
-        guard let sol = solDescription?.sol, sol > 0 else {
-            solDescription = solDescriptions.first
-            return
-        }
-        
-        solDescription = solDescriptions[sol-1]
-    }
-    
-    @IBAction func goToNextSol(_ sender: Any?) {
-        guard let solDescriptions = roverInfo?.solDescriptions else { return }
-        guard let sol = solDescription?.sol, sol < solDescriptions.count else {
+      
+        guard let description = solDescription,
+          let index = roverInfo?.solDescriptions.firstIndex(of: description),
+      description.sol > 0 else {
             solDescription = solDescriptions.last
             return
         }
         
-        solDescription = solDescriptions[sol+1]
+        solDescription = solDescriptions[index-1]
+    }
+    
+    @IBAction func goToNextSol(_ sender: Any?) {
+        guard let solDescriptions = roverInfo?.solDescriptions else { return }
+      
+      guard let description = solDescription,
+          let index = roverInfo?.solDescriptions.firstIndex(of: description),
+          description.sol < solDescriptions.count
+      
+      else {
+            solDescription = solDescriptions.first
+            return
+        }
+        
+        solDescription = solDescriptions[index+1]
     }
     
     // UICollectionViewDataSource/Delegate
@@ -149,9 +157,11 @@ class PhotosCollectionViewController: UIViewController, UICollectionViewDataSour
             defer { self.operations.removeValue(forKey: photoReference.id) }
             
             if let currentIndexPath = self.collectionView?.indexPath(for: cell),
-                currentIndexPath == indexPath {
-                return // Cell has been reused
+                currentIndexPath != indexPath {
+                return
             }
+          
+            
             
             if let data = fetchOp.imageData {
                 cell.imageView.image = UIImage(data: data)
